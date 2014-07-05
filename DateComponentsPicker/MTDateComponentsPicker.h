@@ -11,6 +11,7 @@
 
 @interface MTDateComponentsPicker : UIPickerView <UIPickerViewDataSource, UIPickerViewDelegate>
 
+@property (nonatomic, strong) NSDictionary *titleAttributes;
 @property (nonatomic, strong) NSDateComponents *dateComponents;
 @property (nonatomic, strong) void (^onChange)(NSDateComponents *selectedDateComponents);
 

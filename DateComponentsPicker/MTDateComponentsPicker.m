@@ -68,14 +68,14 @@
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
 	if (component == 0) {
+		return 12 + 1;
+	}
+	else if (component == 1) {
 		NSInteger row = 32;
 		if (pickerView.numberOfComponents > 1)
-			 [pickerView selectedRowInComponent:1];
+			[pickerView selectedRowInComponent:1];
 		if (row == 32) return row;
 		return [[_startOfYear mt_dateMonthsAfter:(row - 1)] mt_daysInCurrentMonth] + 1;
-		}
-	else if (component == 1) {
-		return 12 + 1;
 	}
 	else {
 		return (_maxYear - _minYear) + 1;
@@ -92,12 +92,12 @@
 	NSString *string = @"?";
 	if (component == 0) {
 		if (row != 0)
-			string = [NSString stringWithFormat:@"%d", row];
+			string = [[_startOfYear mt_dateMonthsAfter:(row - 1)] mt_stringFromDateWithFullMonth];
 	}
 
 	else if (component == 1) {
 		if (row != 0)
-			string = [[_startOfYear mt_dateMonthsAfter:(row - 1)] mt_stringFromDateWithFullMonth];
+			string = [NSString stringWithFormat:@"%d", row];
 	}
 
 	else {
@@ -106,25 +106,25 @@
 		}
 	}
 
-	return [[NSAttributedString alloc] initWithString:string];
+	return [[NSAttributedString alloc] initWithString:string attributes:self.titleAttributes];
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
 	if (row == 0) {
-		if (component == 0) [_dateComponents setDay:NSUndefinedDateComponent];
-		if (component == 1) [_dateComponents setMonth:NSUndefinedDateComponent];
+		if (component == 0) [_dateComponents setMonth:NSUndefinedDateComponent];
+		if (component == 1) [_dateComponents setDay:NSUndefinedDateComponent];
 		if (component == 2) [_dateComponents setYear:NSUndefinedDateComponent];
 		return;
 	}
 
 	if (component == 0) {
-		[_dateComponents setDay:row];
+		[_dateComponents setMonth:row];
 		if (_onChange) _onChange(_dateComponents);
 	}
 
 	else if (component == 1) {
-		[_dateComponents setMonth:row];
+		[_dateComponents setDay:row];
 		if (_onChange) _onChange(_dateComponents);
 	}
 
@@ -138,6 +138,14 @@
 	[pickerView reloadComponent:0]; // reload month, number of days could change with month or if leap year.
 }
 
-
+- (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component {
+	if (component == 0) {
+		return 140.0;
+	} else if (component == 1) {
+		return 60.0;
+	} else {
+		return 60.0;
+	}
+}
 
 @end
