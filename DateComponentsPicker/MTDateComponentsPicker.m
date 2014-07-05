@@ -17,9 +17,20 @@
 
 @implementation MTDateComponentsPicker
 
+- (id)initWithFrame:(CGRect)frame {
+	if (self = [super initWithFrame:frame]) {
+		[self setup];
+	}
+	return self;
+}
 
-- (void)awakeFromNib
-{
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		[self setup];
+	}
+}
+
+- (void)setup {
 	_startOfYear = [[NSDate date] mt_startOfCurrentYear];
 	_minYear = 1;
 	_maxYear = [_startOfYear mt_year];
